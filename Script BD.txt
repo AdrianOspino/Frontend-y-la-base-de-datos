@@ -1,0 +1,192 @@
+CREATE DATABASE asesoriaspsicologicas;
+
+CREATE TABLE perfil (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    descripcion TEXT
+);
+
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(255),
+    contrasena VARCHAR(255),
+    nombre VARCHAR(255),
+    primer_apellido VARCHAR(255),
+    segundo_apellido VARCHAR(255),
+    edad INT,
+    sexo VARCHAR(1),
+    documento VARCHAR(255) UNIQUE,
+    telefono VARCHAR(20),
+    idperfil INT,
+    
+   
+FOREIGN KEY (idperfil) REFERENCES perfil(id)
+);
+
+CREATE TABLE atributo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    descripcion TEXT
+);
+
+CREATE TABLE atributoxusuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario INT,
+    idatributo INT,
+    valor VARCHAR(255),
+    descripcion TEXT,
+    
+   
+FOREIGN KEY (idusuario) REFERENCES usuario(id),
+    
+   
+FOREIGN KEY (idatributo) REFERENCES atributo(id)
+);
+
+CREATE TABLE datosestudiante (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    carrera VARCHAR(255),
+    facultad VARCHAR(255),
+    semestre INT,
+    jornada VARCHAR(255),
+    estado_laboral VARCHAR(255),
+    idusuario INT UNIQUE,
+    
+   
+FOREIGN KEY (idusuario) REFERENCES usuario(id)
+);
+
+
+CREATE TABLE datospsicologo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    especialidad VARCHAR(255),
+    jornada VARCHAR(255),
+    experiencia_profesional TEXT,
+    formacion_academica TEXT,
+    idusuario INT UNIQUE,
+    FOREIGN KEY (idusuario) REFERENCES usuario(id)
+);
+
+CREATE TABLE asesoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_de_asesoria VARCHAR(255),
+    resultado TEXT,
+    observaciones TEXT,
+    fecha DATE,
+    hora TIME,
+    estado VARCHAR(255),
+    idusuario INT UNIQUE,
+    psicologo_que_atendio INT UNIQUE,
+    
+    FOREIGN KEY (idusuario) REFERENCES usuario(id),
+     FOREIGN KEY (psicologo_que_atendio) REFERENCES usuario(id)
+);
+
+
+CREATE TABLE sesiones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_de_sesiones INT,
+    duracion_media_sesion INT,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    idusuario INT UNIQUE,
+    psicologo_que_atendio INT UNIQUE,
+    FOREIGN KEY (idusuario) REFERENCES usuario(id),
+    FOREIGN KEY (psicologo_que_atendio) REFERENCES usuario(id)
+);
+
+CREATE TABLE historial (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_de_sesiones INT,
+    tipo_de_sesion TEXT,
+    resultados_de_las_sesiones TEXT,
+    antecedentes TEXT,
+    observaciones TEXT,
+    idusuario INT UNIQUE,
+    psicologo_que_atendio INT UNIQUE,
+
+    FOREIGN KEY (idusuario) REFERENCES usuario(id),
+    FOREIGN KEY (psicologo_que_atendio) REFERENCES usuario(id)
+);
+
+
+INSERT INTO perfil (nombre, descripcion) VALUES
+    ('estudiante', 'Rol para módulos de estudiantes'),
+    ('psicologo', 'Rol para módulos de psicólogos'),
+    ('administrador', 'Rol con todos los beneficios');
+
+INSERT INTO usuario (usuario, contrasena, nombre, primer_apellido, segundo_apellido, edad, sexo, documento, telefono, idperfil) VALUES
+    ('jdoe', 'Gz1#pL7a', 'John', 'Doe', 'Smith', 25, 'M', '123456789', '555-1234', 1),
+    ('mrodriguez', 'Yt3$rW6q', 'Maria', 'Rodriguez', 'Gomez', 30, 'F', '987654321', '555-5678', 2),
+    ('cjones', 'Xb9@sK2m', 'Carlos', 'Jones', 'Martinez', 28, 'M', '456789012', '555-9012', 1),
+    ('llopez', 'Hj5*pZ8o', 'Laura', 'Lopez', 'Gutierrez', 22, 'F', '345678901', '555-3456', 2),
+    ('rsmith', 'Lx7!mV1b', 'Robert', 'Smith', 'Fernandez', 35, 'M', '234567890', '555-6789', 3),
+    ('agonzalez', 'Qf4$tE9w', 'Ana', 'Gonzalez', 'Rodriguez', 26, 'F', '567890123', '555-7890', 1),
+    ('jsanchez', 'Wv2@uR6y', 'Javier', 'Sanchez', 'Lopez', 32, 'M', '678901234', '555-8901', 2),
+    ('mjimenez', 'Nk8*bZ3p', 'Marta', 'Jimenez', 'Martinez', 29, 'F', '789012345', '555-1234', 3),
+    ('aherrera', 'Pq1#oG7z', 'Alejandro', 'Herrera', 'Vargas', 27, 'M', '890123456', '555-5678', 1),
+    ('itorres', 'Uy6!hT3r', 'Isabel', 'Torres', 'Serrano', 31, 'F', '901234567', '555-9012', 2),
+    ('druiz', 'Ew9@kI4s', 'Daniel', 'Ruiz', 'Perez', 24, 'M', '012345678', '555-3456', 3),
+    ('scastillo', 'Mg7!hF2v', 'Sara', 'Castillo', 'Fernandez', 33, 'F', '345678901', '555-6789', 1);
+
+INSERT INTO atributo (nombre, descripcion) VALUES
+    ('direccion_estudiante', 'Dirección del estudiante'),
+    ('acudiente_estudiante', 'Nombre del acudiente del estudiante'),
+    ('telefono_acudiente', 'Teléfono del acudiente'),
+    ('correo_acudiente', 'Correo electrónico del acudiente'),
+    ('direccion_acudiente', 'Dirección del acudiente'),
+    ('grado_estudiante', 'Grado del estudiante'),
+    ('promedio_estudiante', 'Promedio académico del estudiante'),
+    ('nombre_materia_favorita', 'Nombre de la materia favorita'),
+    ('hobby_estudiante', 'Hobby o pasatiempo del estudiante'),
+    ('direccion_psicologo', 'Dirección del psicólogo'),
+    ('especialidad_psicologo', 'Especialidad del psicólogo'),
+    ('telefono_psicologo', 'Teléfono del psicólogo');
+
+INSERT INTO atributoxusuario (idusuario, idatributo, valor, descripcion) VALUES
+    (3, 4, 'alskd@gmail.com', 'correo electronico del acudiente del estudiante idusuario 3 Carlos Jones '),
+    (7, 6, '11', 'Grado del estudiante idusuario 7 Javier Sanchez'),
+    (5, 2, 'Sandra Rodriguez', 'Nombre del acudiente del estudiante idusuario 5 Robert Smith'),
+    (8, 8, 'Historia', 'Nombre de la materia favorita idusuario 8 Marta Jimenez'),
+    (6, 3, '555-9876', 'Teléfono del acudiente idusuario 6 Ana Gonzalez'),
+    (4, 5, '789 Maple Avenue', 'Dirección del acudiente idusuario 4 Laura Lopez'),
+    (9, 7, '9.0', 'Promedio académico del estudiante idusuario 9 Alejandro Herrera'),
+    (12, 9, 'Pintura', 'Hobby o pasatiempo del estudiante idusuario 12 Sara Castillo'),
+    (11, 10, '890 Pine Street', 'Dirección del psicólogo idusuario 11 Daniel Ruiz'),
+    (10, 11, 'Psicología Educativa', 'Especialidad del psicólogo idusuario 10 Isabel Torres'),
+    (2, 12, '555-5678', 'Teléfono del psicólogo idusuario 2 Maria Rodriguez'),
+    (1, 1, '456 Oak Street', 'Dirección del estudiante idusuario 1 John Doe');
+
+INSERT INTO datosestudiante (carrera, facultad, semestre, jornada, estado_laboral, idusuario) VALUES
+    ('Ingeniería Informática', 'Facultad de Ingeniería', 5, 'Mañana', 'Tiempo parcial', 3),
+    ('Psicología', 'Facultad de Ciencias Sociales', 7, 'Tarde', 'Tiempo completo', 9),
+    ('Arquitectura', 'Facultad de Arquitectura', 8, 'Tarde', 'Medio tiempo', 1),
+    ('Biología', 'Facultad de Ciencias Naturales', 4, 'Mañana', 'Tiempo completo', 6),
+    ('Comunicación Social', 'Facultad de Ciencias Sociales', 8, 'Tarde', 'Tiempo completo', 12);
+
+INSERT INTO datospsicologo (especialidad, jornada, experiencia_profesional, formacion_academica, idusuario) VALUES
+    ('Psicología Clínica', 'Mañana', '5 años', 'Licenciatura en Psicología', 2),
+    ('Psicología Educativa', 'Tarde', '8 años', 'Máster en Psicología Educativa', 4),
+    ('Psicología Organizacional', 'Tarde', '10 años', 'Doctorado en Psicología Organizacional', 7),
+    ('Psicología Infantil', 'Mañana', '6 años', 'Licenciatura en Psicología', 10);
+    
+INSERT INTO asesoria (tipo_de_asesoria, resultado, observaciones, fecha, hora, estado, idusuario, idpsicologo) VALUES
+    ('Asesoría Individual', 'Éxito', 'El estudiante mostró mejoría significativa en su rendimiento académico.', '2023-11-15', '10:00', 'Finalizada', 1, 2),
+    ('Asesoría Grupal', 'En progreso', 'El grupo está trabajando bien en conjunto, pero algunos estudiantes necesitan atención adicional.', '2023-11-16', '14:30', 'En curso', 3, 4),
+    ('Asesoría de Orientación Vocacional', 'Éxito', 'El estudiante ha elegido una carrera que se alinea con sus intereses y habilidades.', '2023-11-17', '11:00', 'Finalizada', 6, 7),
+    ('Asesoría de Desarrollo Personal', 'En progreso', 'El estudiante está trabajando en mejorar sus habilidades de afrontamiento.', '2023-11-18', '13:45', 'En curso', 9, 10),
+    ('Asesoría Familiar', 'Éxito', 'La familia ha mejorado la comunicación y resuelto conflictos de manera constructiva.', '2023-11-19', '09:30', 'Finalizada', 12, 4);
+
+INSERT INTO asesoria (tipo_de_asesoria, resultado, observaciones, fecha, hora, estado, idusuario, psicologo_que_atendio) VALUES ('Asesoría Individual', 'Éxito', 'El estudiante mostró mejoría significativa en su rendimiento académico.', '2023-11-15', '10:00', 'Finalizada', 1, 2), ('Asesoría Grupal', 'En progreso', 'El grupo está trabajando bien en conjunto, pero algunos estudiantes necesitan atención adicional.', '2023-11-16', '14:30', 'En curso', 3, 4), ('Asesoría de Orientación Vocacional', 'Éxito', 'El estudiante ha elegido una carrera que se alinea con sus intereses y habilidades.', '2023-11-17', '11:00', 'Finalizada', 6, 7), ('Asesoría de Desarrollo Personal', 'En progreso', 'El estudiante está trabajando en mejorar sus habilidades de afrontamiento.', '2023-11-18', '13:45', 'En curso', 9, 10);
+
+INSERT INTO sesiones (numero_de_sesiones, duracion_media_sesion, fecha_inicio, fecha_fin, idusuario, psicologo_que_atendio) VALUES
+    (10, '45 minutos', '2023-11-15', '2023-12-15', 1, 2),
+    (5, '60 minutos', '2023-11-16', '2023-12-16', 3, 4),
+    (8, '50 minutos', '2023-11-17', '2023-12-17', 6, 7),
+    (12, '40 minutos', '2023-11-18', '2023-12-18', 9, 10);
+
+INSERT INTO historial (numero_de_sesiones, resultados_de_las_sesiones, observaciones, idusuario, psicologo_que_atendio) VALUES
+    (5, 'Avances significativos en la gestión del estrés.', 'El estudiante ha implementado con éxito las técnicas de relajación aprendidas.', 1, 2),
+    (8, 'Mejora en la comunicación familiar.', 'La familia ha experimentado una mejoría en su dinámica y resolución de conflictos.', 3, 4),
+    (12, 'Exploración de metas académicas y profesionales.', 'El estudiante ha identificado metas claras para su futuro académico y profesional.', 6, 7),
+    (10, 'Desarrollo de habilidades sociales.', 'Se han trabajado estrategias para mejorar la interacción social y la autoconfianza.', 9, 10);
